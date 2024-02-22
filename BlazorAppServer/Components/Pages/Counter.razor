@@ -1,0 +1,52 @@
+﻿@page "/counter"
+@attribute [StreamRendering]
+@using DataAccess.Data
+@inject AppDbContext appDbContext
+@using Domain.Entities
+@using Microsoft.EntityFrameworkCore
+
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Customers.Count != 0)
+                {
+                    foreach (var customer in Customers)
+                    {
+                        <tr>
+                            <td>@customer.Id</td>
+                            <td>@customer.Name</td>
+                            <td>@customer.Email</td>
+                            <td>@customer.Address</td>
+                        </tr>
+                    }
+
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">
+                            <div class="alert alert-info">No Information Added</div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    ICollection<Customer> Customers = [];
+    protected override async Task OnInitializedAsync()
+    {
+        Customers = await appDbContext.Customers.ToListAsync();
+    }
+}

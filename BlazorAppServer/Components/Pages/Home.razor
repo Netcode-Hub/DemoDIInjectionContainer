@@ -1,0 +1,33 @@
+﻿@page "/"
+@using Domain.Entities
+@using DataAccess.Data
+@rendermode InteractiveServer
+@inject AppDbContext appDbContext
+<div class="row">
+    <div class="col-lg-6">
+        <EditForm Model="@customer" OnValidSubmit="Save">
+            <label class="form-label"> Name</label>
+            <InputText class="form-control" @bind-Value="customer.Name"></InputText>
+
+            <label class="form-label mt-2"> Email Address</label>
+            <InputText class="form-control" @bind-Value="customer.Email"></InputText>
+
+            <label class="form-label mt-2"> Address</label>
+            <InputTextArea class="form-control mb-2" @bind-Value="customer.Address"></InputTextArea>
+
+            <button class="btn btn-primary" type="submit">Save</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+
+    public Customer customer = new();
+
+    async Task Save()
+    {
+        appDbContext.Add(customer);
+        await appDbContext.SaveChangesAsync();
+        customer = new();
+    }
+}
